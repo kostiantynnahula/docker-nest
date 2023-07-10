@@ -1,15 +1,19 @@
 import { PrismaClient } from '@prisma/client';
+import { HashService } from './../src/users/hash.service';
 
 const prisma = new PrismaClient();
+const hashService = new HashService();
 
 async function main() {
+  const pass1 = await hashService.hash('password-sabin');
+  const pass2 = await hashService.hash('password-alex');
   const user1 = await prisma.user.upsert({
     where: { email: 'sabin@adams.com' },
     update: {},
     create: {
       email: 'sabin@adams.com',
       name: 'Sabin Adams',
-      password: 'password-sabin',
+      password: pass1,
     },
   });
 
@@ -19,7 +23,7 @@ async function main() {
     create: {
       email: 'alex@ruheni.com',
       name: 'Alex Ruheni',
-      password: 'password-alex',
+      password: pass2,
     },
   });
 

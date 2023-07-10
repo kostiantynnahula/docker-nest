@@ -17,6 +17,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Median')
     .setDescription('The Median API description')
+    .addBearerAuth()
     .setVersion('0.1')
     .build();
 
