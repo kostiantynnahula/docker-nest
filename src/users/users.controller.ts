@@ -22,19 +22,20 @@ export class UsersController {
   @Post()
   @ApiCreatedResponse({ type: UserEntity })
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.create(createUserDto);
+    return new UserEntity(await this.usersService.create(createUserDto));
   }
 
   @Get()
   @ApiOkResponse({ type: UserEntity, isArray: true })
   async findAll() {
-    return this.usersService.findAll();
+    const users = await this.usersService.findAll();
+    return users.map((user) => new UserEntity(user));
   }
 
   @Get(':id')
   @ApiOkResponse({ type: UserEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+    return new UserEntity(await this.usersService.findOne(id));
   }
 
   @Patch(':id')
@@ -43,12 +44,12 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.update(id, updateUserDto);
+    return new UserEntity(await this.usersService.update(id, updateUserDto));
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: UserEntity })
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(id);
+    return new UserEntity(await this.usersService.remove(id));
   }
 }
